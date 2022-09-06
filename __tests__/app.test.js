@@ -40,6 +40,28 @@ describe("GET", ()=>{
                 })
         })
     })
+    describe("/api/reviews/:review_id", ()=>{
+        it("should return status 200, and a review object containing specific properties", ()=>{
+            return request(app)
+                .get('/api/reviews/1')
+                .expect(200)
+                .then(({body} )=>{
+                    const review = body.review[0]
+                    expect(review).toEqual(
+                        expect.objectContaining({
+                            title: expect.any(String),
+                            designer: expect.any(String),
+                            owner: expect.any(String),
+                            review_img_url: expect.any(String),
+                            review_body: expect.any(String),
+                            category: expect.any(String),
+                            created_at: expect.any(String),
+                            votes: expect.any(Number)
+                        })
+                    )
+                })
+        })
+    })
     describe("Error Handling", ()=>{
         it("should return status 404: Not found when given a path that does not exist", ()=>{
             return request(app)
