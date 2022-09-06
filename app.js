@@ -17,7 +17,8 @@ app.use((error, request, response, next)=>{
 })
 
 app.use((error, request, response, next)=>{
-    response.status(500).send({ msg: "this link does not exist"})
+    console.log(error)
+    response.status(500).send({ msg: "Internal Server Error"})
 })
 
 module.exports = app;
