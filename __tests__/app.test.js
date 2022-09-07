@@ -49,14 +49,16 @@ describe("GET", ()=>{
                     const review = body.review[0]
                     expect(review).toEqual(
                         expect.objectContaining({
-                            title: expect.any(String),
-                            designer: expect.any(String),
-                            owner: expect.any(String),
-                            review_img_url: expect.any(String),
-                            review_body: expect.any(String),
-                            category: expect.any(String),
+                            review_id: 1,
+                            title: 'Agricola',
+                            designer: 'Uwe Rosenberg',
+                            owner: 'mallionaire',
+                            review_img_url:
+                            'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
+                            review_body: 'Farmyard fun!',
+                            category: 'euro game',
                             created_at: expect.any(String),
-                            votes: expect.any(Number)
+                            votes: 1
                         })
                     )
                 })
