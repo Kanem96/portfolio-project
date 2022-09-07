@@ -71,5 +71,13 @@ describe("GET", ()=>{
                     expect(body).toEqual({status: 404, msg: "Not Found"})
                 })
         })
+        it("should return status 400: Bad Request when given an invalid path", ()=>{
+            return request(app)
+                .get('/api/reviews/not-a-review-id')
+                .expect(400)
+                .then(({body})=>{
+                    expect(body).toEqual({status: 400, msg: 'bad request'})
+                })
+        })
     })
 })
