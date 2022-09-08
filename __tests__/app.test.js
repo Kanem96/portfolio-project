@@ -64,6 +64,26 @@ describe("GET", ()=>{
                 })
         })
     })
+    describe("/api/users", ()=>{
+        it("should return status: 200, and an array of objects containing specific properties",()=>{
+            return request(app)
+                .get("/api/users")
+                .expect(200)
+                .then(({body})=>{
+                    if (body.length !== 0) {
+                        body.users.forEach((user)=>{
+                            expect(user).toEqual(
+                                expect.objectContaining({
+                                    username: expect.any(String),
+                                    name: expect.any(String),
+                                    avatar_url: expect.any(String),
+                                })
+                            )
+                        })
+                    }
+            })
+        })
+    })
     describe("Error Handling", ()=>{
         it("should return status 404: Not found when given a path that does not exist", ()=>{
             return request(app)
