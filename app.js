@@ -1,7 +1,8 @@
 const express = require("express");
 const {
     getCategories,
-    getReviewById
+    getReviewById,
+    getUsers
 } = require("./controllers/controllers");
 
 const app = express();
@@ -10,6 +11,8 @@ app.get('/api/categories', getCategories);
 
 app.get('/api/reviews/:review_id', getReviewById);
 
+app.get('/api/users', getUsers);
+
 app.all("*", (request, response)=>{
     response.status(404).send({status: 404, msg: "Not Found"})
 })
@@ -17,7 +20,7 @@ app.all("*", (request, response)=>{
 app.use((error, request, response, next)=>{
     if(error.hasOwnProperty("status") && error.hasOwnProperty("msg"))
     response.status(error.status).send({status: error.status, msg: error.msg})
-})
+})  
 
 app.use((error, request, response, next)=>{
     console.log(error)
