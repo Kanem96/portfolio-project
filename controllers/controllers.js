@@ -36,13 +36,14 @@ exports.getUsers = (request, response, next) => {
         })
 }
 
-exports.patchReviewById = (request, response) => {
-    console.log("in controller")
+exports.patchReviewById = (request, response, next) => {
     const {review_id} = request.params
- 
-    updateReviewById(review_id, request.body)
+    const updateInformation = request.body
+    updateReviewById(review_id, updateInformation)
         .then((review) => {
-            console.log("in here")
             response.status(200).send({review})
+        })
+        .catch((error) => {
+            next(error)
         })
 }
