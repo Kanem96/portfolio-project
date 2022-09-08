@@ -83,6 +83,17 @@ describe("GET", ()=>{
                 })
             })
         })
+        describe("/api/reviews/:review_id?comment_count", ()=>{
+            it("should return status 200, and a review object containing specific properties", ()=>{
+                return request(app)
+                    .get('/api/reviews/1')
+                    .expect(200)
+                    .then(({body} )=>{
+                        const review = body.review[0]
+                        
+                    })
+            })
+        })
 })
 
 describe("PATCH", () => {
@@ -179,7 +190,7 @@ describe("Error Handling", ()=>{
     })
     it("should return status 400: Bad Request when given an invalid key on the request body property", ()=>{
         const newVote = {
-            incVotes: 50 // Passing string into request body, this should return error
+            incVotes: 50 // Passing string into request body, this should return error as the datatype in the db is an INT
         }
         return request(app)
             .patch('/api/reviews/1')
