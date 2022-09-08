@@ -68,15 +68,17 @@ describe("GET", ()=>{
                 .get("/api/users")
                 .expect(200)
                 .then(({body})=>{
-                    body.users.forEach((user)=>{
-                        expect(user).toEqual(
-                            expect.objectContaining({
-                                username: expect.any(String),
-                                name: expect.any(String),
-                                avatar_url: expect.any(String),
-                            })
-                        )
-                })
+                    if (body.length !== 0) {
+                        body.users.forEach((user)=>{
+                            expect(user).toEqual(
+                                expect.objectContaining({
+                                    username: expect.any(String),
+                                    name: expect.any(String),
+                                    avatar_url: expect.any(String),
+                                })
+                            )
+                        })
+                    }
             })
         })
     })
