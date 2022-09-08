@@ -32,4 +32,7 @@ exports.getUsers = (request, response) => {
         .then((users)=>{
             response.status(200).send({users})
         })
+        .catch((error)=>{
+            next(error)
+        })
 }
