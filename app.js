@@ -1,3 +1,4 @@
+const e = require("express");
 const express = require("express");
 const {
     getCategories,
@@ -23,8 +24,9 @@ app.all("*", (request, response)=>{
 })
 
 app.use((error, request, response, next)=>{
-    if(error.hasOwnProperty("status") && error.hasOwnProperty("msg"))
-    response.status(error.status).send({status: error.status, msg: error.msg})
+    if(error.status && error.msg) {
+        response.status(error.status).send({msg: error.msg})
+    }
 })  
 
 app.use((error, request, response, next)=>{

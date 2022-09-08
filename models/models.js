@@ -10,7 +10,7 @@ exports.selectCategories = () => {
 exports.selectReviewById = (reviewId) => {
     
     const validId = /\d+/
-    if (!validId.test(reviewId)) return Promise.reject({ status: 400, msg: "bad request" })
+    if (!validId.test(reviewId)) return Promise.reject({ status: 400, msg: "Bad Request" })
 
     return db.query('SELECT * FROM reviews WHERE review_id = $1', [reviewId])
         .then(({rows})=>{
@@ -28,12 +28,16 @@ exports.selectUsers = () => {
 }
 
 exports.updateReviewById = (reviewId, updateInformation) => {
+    const newVote = updateInformation.inc_votes
+    if (Object.keys(updateInformation)[0] !== "inc_votes" || typeof newVote !==  'number') {
+        return Promise.reject({status: 400, msg: `Bad Request`})
+    }
     return db.query(`
     UPDATE reviews
     SET votes = votes + $1
     WHERE review_id = $2
     RETURNING *
-    `, [updateInformation, reviewId])
+    `, [newVote, reviewId])
         .then(({rows}) => {
             return rows[0]
         })

@@ -70,20 +70,19 @@ describe("GET", ()=>{
                 .get("/api/users")
                 .expect(200)
                 .then(({body})=>{
-                    if (body.length !== 0) {
-                        body.users.forEach((user)=>{
-                            expect(user).toEqual(
-                                expect.objectContaining({
-                                    username: expect.any(String),
-                                    name: expect.any(String),
-                                    avatar_url: expect.any(String),
-                                })
-                            )
-                        })
-                    }
+                    expect(body.users.length).toBeGreaterThan(0)
+                    body.users.forEach((user)=>{
+                        expect(user).toEqual(
+                            expect.objectContaining({
+                                username: expect.any(String),
+                                name: expect.any(String),
+                                avatar_url: expect.any(String),
+                            })
+                        )
+                    })
+                })
             })
         })
-    })
 })
 
 describe("PATCH", () => {
@@ -147,7 +146,7 @@ describe("Error Handling", ()=>{
             .get('/api/not-a-path')
             .expect(404)
             .then(({body})=>{
-                expect(body).toEqual({status: 404, msg: "Not Found"})
+                expect(body.msg).toEqual("Not Found")
             })
     })
     it("should return status 404: No Review Found when given an id that does not exist", ()=>{
@@ -155,7 +154,7 @@ describe("Error Handling", ()=>{
             .get('/api/reviews/9999')
             .expect(404)
             .then(({body})=>{
-                expect(body).toEqual({status: 404, msg: 'No review found for review_id: 9999'})
+                expect(body.msg).toEqual('No review found for review_id: 9999')
             })
     })
     it("should return status 400: Bad Request when given an invalid path", ()=>{
@@ -163,7 +162,31 @@ describe("Error Handling", ()=>{
             .get('/api/reviews/not-a-review-id')
             .expect(400)
             .then(({body})=>{
-                expect(body).toEqual({status: 400, msg: 'bad request'})
+                expect(body.msg).toEqual('Bad Request')
+            })
+    })
+    it("should return status 400: Bad Request when given an invalid value on the request body property", ()=>{
+        const newVote = {
+            inc_votes: '50' // Passing string into request body, this should return error
+        }
+        return request(app)
+            .patch('/api/reviews/1')
+            .send(newVote)
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toEqual('Bad Request')
+            })
+    })
+    it("should return status 400: Bad Request when given an invalid key on the request body property", ()=>{
+        const newVote = {
+            incVotes: 50 // Passing string into request body, this should return error
+        }
+        return request(app)
+            .patch('/api/reviews/1')
+            .send(newVote)
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toEqual('Bad Request')
             })
     })
 })
