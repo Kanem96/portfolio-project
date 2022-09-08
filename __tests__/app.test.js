@@ -124,7 +124,7 @@ describe("PATCH", () => {
                 .expect(200)
                 .then(({body}) => {
                     expect(body).toEqual(
-                        {
+                        {review: {
                             review_id: 1,
                             title: 'Agricola',
                             designer: 'Uwe Rosenberg',
@@ -133,9 +133,9 @@ describe("PATCH", () => {
                               'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
                             review_body: 'Farmyard fun!',
                             category: 'euro game',
-                            created_at: new Date(1610964020514),
+                            created_at: expect.any(String),
                             votes: 51
-                          }
+                          }}
                     )
                 })
         })

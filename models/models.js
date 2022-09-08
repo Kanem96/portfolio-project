@@ -28,15 +28,13 @@ exports.selectUsers = () => {
 }
 
 exports.updateReviewById = (reviewId, updateInformation) => {
-    console.log("in model")
-    const {inc_votes} = updateInformation
     return db.query(`
     UPDATE reviews
-    SET votes = $1
+    SET votes = votes + $1
     WHERE review_id = $2
     RETURNING *
-    `, [inc_votes, reviewId])
+    `, [updateInformation, reviewId])
         .then(({rows}) => {
-            return rows
+            return rows[0]
         })
 }
