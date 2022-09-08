@@ -178,7 +178,7 @@ describe("Error Handling", ()=>{
     })
     it("should return status 400: Bad Request when given an invalid value on the request body property", ()=>{
         const newVote = {
-            inc_votes: '50' // Passing string into request body, this should return error
+            inc_votes: 'invalid value' // Passing string into request body, this should return error
         }
         return request(app)
             .patch('/api/reviews/1')
@@ -190,7 +190,7 @@ describe("Error Handling", ()=>{
     })
     it("should return status 400: Bad Request when given an invalid key on the request body property", ()=>{
         const newVote = {
-            incVotes: 50 // Passing string into request body, this should return error as the datatype in the db is an INT
+            invalidKey: 50 // Passing string into request body, this should return error as the datatype in the db is an INT
         }
         return request(app)
             .patch('/api/reviews/1')
