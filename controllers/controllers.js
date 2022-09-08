@@ -1,8 +1,8 @@
-const { response } = require("../app")
 const {
     selectCategories,
     selectReviewById,
     selectUsers,
+    updateReviewById
 } = require("../models/models")
 
 exports.getCategories = (request, response, next)=>{
@@ -16,7 +16,6 @@ exports.getCategories = (request, response, next)=>{
 }
 
 exports.getReviewById = (request, response, next) =>{
-
     const {review_id} = request.params 
     selectReviewById(review_id)
         .then((review)=>{
@@ -27,12 +26,23 @@ exports.getReviewById = (request, response, next) =>{
         })
 }
 
-exports.getUsers = (request, response) => {
+exports.getUsers = (request, response, next) => {
     selectUsers()
         .then((users)=>{
             response.status(200).send({users})
         })
         .catch((error)=>{
             next(error)
+        })
+}
+
+exports.patchReviewById = (request, response) => {
+    console.log("in controller")
+    const {review_id} = request.params
+ 
+    updateReviewById(review_id, request.body)
+        .then((review) => {
+            console.log("in here")
+            response.status(200).send({review})
         })
 }

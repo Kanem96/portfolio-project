@@ -2,7 +2,8 @@ const express = require("express");
 const {
     getCategories,
     getReviewById,
-    getUsers
+    getUsers,
+    patchReviewById
 } = require("./controllers/controllers");
 
 const app = express();
@@ -12,6 +13,8 @@ app.get('/api/categories', getCategories);
 app.get('/api/reviews/:review_id', getReviewById);
 
 app.get('/api/users', getUsers);
+
+app.patch('/api/reviews/:review_id', patchReviewById)
 
 app.all("*", (request, response)=>{
     response.status(404).send({status: 404, msg: "Not Found"})

@@ -1,5 +1,4 @@
 const db = require("../db/connection")
-const { reviewData } = require("../db/data/test-data")
 
 exports.selectCategories = () => {
     return db.query('SELECT * FROM categories')
@@ -25,5 +24,19 @@ exports.selectUsers = () => {
     return db.query('SELECT * FROM users')
         .then(({rows})=>{
             return rows;
+        })
+}
+
+exports.updateReviewById = (reviewId, updateInformation) => {
+    console.log("in model")
+    const {inc_votes} = updateInformation
+    return db.query(`
+    UPDATE reviews
+    SET votes = $1
+    WHERE review_id = $2
+    RETURNING *
+    `, [inc_votes, reviewId])
+        .then(({rows}) => {
+            return rows
         })
 }
