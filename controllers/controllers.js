@@ -1,7 +1,8 @@
 const { response } = require("../app")
 const {
     selectCategories,
-    selectReviewById
+    selectReviewById,
+    selectUsers,
 } = require("../models/models")
 
 exports.getCategories = (request, response, next)=>{
@@ -23,5 +24,12 @@ exports.getReviewById = (request, response, next) =>{
         })
         .catch((error)=>{
             next(error)
+        })
+}
+
+exports.getUsers = (request, response) => {
+    selectUsers()
+        .then((users)=>{
+            response.status(200).send({users})
         })
 }
