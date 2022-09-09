@@ -40,6 +40,31 @@ describe("GET", ()=>{
                 })
         })
     })
+    describe("/api/reviews", () => {
+        it("should return status: 200, and return a list of all reviews with specific properties", () => {
+            return request(app)
+                .get("/api/reviews")
+                .expect(200)
+                .then(({body}) => {
+                    body.reviews.forEach((review) => {
+                        expect(review).toEqual(
+                            expect.objectContaining({
+                                review_id: expect.any(Number),
+                                title: expect.any(String),
+                                designer: expect.any(String),
+                                owner: expect.any(String),
+                                review_img_url: expect.any(String),
+                                review_body: expect.any(String),
+                                category: expect.any(String),
+                                created_at: expect.any(String),
+                                votes: expect.any(Number),
+                                comment_count: expect.any(Number)
+                            })
+                        )
+                    })
+                })
+        })
+    })
     describe("/api/reviews/:review_id", ()=>{
         it("should return status 200, and a review object containing specific properties", ()=>{
             return request(app)

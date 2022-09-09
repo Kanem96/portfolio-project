@@ -7,6 +7,17 @@ exports.selectCategories = () => {
         })
 }
 
+exports.selectReviews = () => {
+    return db.query(`
+    SELECT reviews.*, COUNT(comments.review_id)::INT AS comment_count
+    FROM reviews 
+    LEFT JOIN comments ON reviews.review_id = comments.review_id
+    GROUP BY reviews.review_id`)
+        .then(({rows}) => {
+            return rows
+        })
+}
+
 exports.selectReviewById = (reviewId) => {
     const validId = /\d+/
     if (!validId.test(reviewId)) return Promise.reject({ status: 400, msg: "Bad Request" })
