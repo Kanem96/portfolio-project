@@ -31,10 +31,10 @@ exports.selectReviews = (query) => {
             GROUP BY reviews.review_id`
         
             return db.query(queryStr, queryValue)
-                .then(({rows}) => {
-                    const reviews = rows
-                    return reviews
-                })
+        })
+        .then(({rows}) => {
+            const reviews = rows
+            return reviews
         })
 }
 
@@ -78,3 +78,17 @@ exports.updateReviewById = (reviewId, updateInformation) => {
             return rows[0]
         })
 }
+
+exports.selectCommentsByReviewId = (reviewId) => {
+    return db.query(`SELECT * FROM reviews WHERE review_id = $1`, [reviewId])
+        .then(({rows}) => {
+            const reviews = rows
+            if (reviews.length === 0) return Promise.reject({status: 404, msg: `Review ID: ${reviewId} does not exist`})
+            
+            return db.query(`SELECT * FROM comments WHERE review_id = $1`, [reviewId])
+        })
+        .then(({rows}) => {
+            const comments = rows
+            return comments
+        })
+    }
