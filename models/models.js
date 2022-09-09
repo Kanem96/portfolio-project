@@ -20,7 +20,6 @@ exports.selectReviewById = (reviewId) => {
     , [reviewId])
         .then(({rows})=>{
             const review = rows[0]
-            console.log(review)
             if (!review) return Promise.reject({status: 404, msg: `No review found for review_id: ${reviewId}`})
             return rows
         })

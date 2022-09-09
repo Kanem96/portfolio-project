@@ -16,7 +16,6 @@ exports.getCategories = (request, response, next)=>{
 }
 
 exports.getReviewById = (request, response, next) =>{
-    console.log("in controller")
     const {review_id} = request.params
     selectReviewById(review_id)
         .then((review)=>{
