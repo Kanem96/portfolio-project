@@ -8,11 +8,16 @@ exports.selectCategories = () => {
 }
 
 exports.selectReviewById = (reviewId) => {
-    
     const validId = /\d+/
     if (!validId.test(reviewId)) return Promise.reject({ status: 400, msg: "Bad Request" })
 
-    return db.query('SELECT * FROM reviews WHERE review_id = $1', [reviewId])
+    return db.query(`
+    SELECT reviews.*, COUNT(comments.review_id)::INT AS comment_count
+    FROM reviews 
+    LEFT JOIN comments ON reviews.review_id = comments.review_id
+    WHERE reviews.review_id = $1
+    GROUP BY reviews.review_id`
+    , [reviewId])
         .then(({rows})=>{
             const review = rows[0]
             if (!review) return Promise.reject({status: 404, msg: `No review found for review_id: ${reviewId}`})

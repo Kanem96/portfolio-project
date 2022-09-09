@@ -58,7 +58,31 @@ describe("GET", ()=>{
                             review_body: 'Farmyard fun!',
                             category: 'euro game',
                             created_at: expect.any(String),
-                            votes: 1
+                            votes: 1,
+                            comment_count: 0,
+                        })
+                    )
+                })
+        })
+        it("should return status 200, and a review object containing specific properties", ()=>{
+            return request(app)
+                .get('/api/reviews/2')
+                .expect(200)
+                .then(({body} )=>{
+                    const review = body.review[0]
+                    expect(review).toEqual(
+                        expect.objectContaining({
+                            review_id: 2,
+                            title: 'Jenga',
+                            designer: 'Leslie Scott',
+                            owner: 'philippaclaire9',
+                            review_img_url:
+                                'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
+                            review_body: 'Fiddly fun for all the family',
+                            category: 'dexterity',
+                            created_at: expect.any(String),
+                            votes: 5,
+                            comment_count: 3
                         })
                     )
                 })
@@ -102,8 +126,7 @@ describe("PATCH", () => {
                             title: 'Agricola',
                             designer: 'Uwe Rosenberg',
                             owner: 'mallionaire',
-                            review_img_url:
-                              'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
+                            review_img_url:'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
                             review_body: 'Farmyard fun!',
                             category: 'euro game',
                             created_at: expect.any(String),
@@ -167,7 +190,7 @@ describe("Error Handling", ()=>{
     })
     it("should return status 400: Bad Request when given an invalid value on the request body property", ()=>{
         const newVote = {
-            inc_votes: '50' // Passing string into request body, this should return error
+            inc_votes: 'invalid value' // Passing string into request body, this should return error
         }
         return request(app)
             .patch('/api/reviews/1')
@@ -179,7 +202,7 @@ describe("Error Handling", ()=>{
     })
     it("should return status 400: Bad Request when given an invalid key on the request body property", ()=>{
         const newVote = {
-            incVotes: 50 // Passing string into request body, this should return error
+            invalidKey: 50 // Passing string into request body, this should return error as the datatype in the db is an INT
         }
         return request(app)
             .patch('/api/reviews/1')
