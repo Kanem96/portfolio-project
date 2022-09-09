@@ -17,7 +17,8 @@ exports.getCategories = (request, response, next)=>{
 }
 
 exports.getReviews = (request, response) => {
-    selectReviews()
+    const {query} = request
+    selectReviews(query)
         .then((reviews) => {
             response.status(200).send({reviews})
         })

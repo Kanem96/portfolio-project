@@ -65,6 +65,32 @@ describe("GET", ()=>{
                 })
         })
     })
+    describe("/api/reviews?category", () => {
+        it("should return status: 200, and return a list of all reviews filtered by the given query category", () => {
+            return request(app)
+                .get("/api/reviews?category=social deduction")
+                .expect(200)
+                .then(({body}) => {
+                    console.log(body)
+                    body.reviews.forEach((review) => {
+                        expect(review).toEqual(
+                            expect.objectContaining({
+                                review_id: expect.any(Number),
+                                title: expect.any(String),
+                                designer: expect.any(String),
+                                owner: expect.any(String),
+                                review_img_url: expect.any(String),
+                                review_body: expect.any(String),
+                                category: 'social deduction',
+                                created_at: expect.any(String),
+                                votes: expect.any(Number),
+                                comment_count: expect.any(Number)
+                            })
+                        )
+                    })
+                })
+        })
+    })
     describe("/api/reviews/:review_id", ()=>{
         it("should return status 200, and a review object containing specific properties", ()=>{
             return request(app)

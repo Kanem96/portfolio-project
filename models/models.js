@@ -7,12 +7,22 @@ exports.selectCategories = () => {
         })
 }
 
-exports.selectReviews = () => {
-    return db.query(`
-    SELECT reviews.*, COUNT(comments.review_id)::INT AS comment_count
+exports.selectReviews = (query) => {
+    const queryValue = [];
+    let conditionStr = ""
+
+    if (query.category) {
+        conditionStr += ` WHERE category = $1`
+        queryValue.push(query.category)
+    }
+
+    let queryStr = `SELECT reviews.*, COUNT(comments.review_id)::INT AS comment_count
     FROM reviews 
     LEFT JOIN comments ON reviews.review_id = comments.review_id
-    GROUP BY reviews.review_id`)
+    ${conditionStr}
+    GROUP BY reviews.review_id`
+
+    return db.query(queryStr, queryValue)
         .then(({rows}) => {
             return rows
         })

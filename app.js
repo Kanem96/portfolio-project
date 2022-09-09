@@ -4,7 +4,7 @@ const {
     getReviewById,
     getUsers,
     patchReviewById,
-    getReviews
+    getReviews  
 } = require("./controllers/controllers");
 
 const app = express();
