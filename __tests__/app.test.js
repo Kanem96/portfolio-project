@@ -40,6 +40,65 @@ describe("GET", ()=>{
                 })
         })
     })
+    describe("/api/reviews", () => {
+        it("should return status: 200, and return a list of all reviews with specific properties", () => {
+            return request(app)
+                .get("/api/reviews")
+                .expect(200)
+                .then(({body}) => {
+                    body.reviews.forEach((review) => {
+                        expect(review).toEqual(
+                            expect.objectContaining({
+                                review_id: expect.any(Number),
+                                title: expect.any(String),
+                                designer: expect.any(String),
+                                owner: expect.any(String),
+                                review_img_url: expect.any(String),
+                                review_body: expect.any(String),
+                                category: expect.any(String),
+                                created_at: expect.any(String),
+                                votes: expect.any(Number),
+                                comment_count: expect.any(Number)
+                            })
+                        )
+                    })
+                })
+        })
+    })
+    describe("/api/reviews?category", () => {
+        it("should return status: 200, and return a list of all reviews filtered by the given query category", () => {
+            return request(app)
+                .get("/api/reviews?category=social deduction")
+                .expect(200)
+                .then(({body}) => {
+                    expect(body.reviews.length).toBeGreaterThan(0)
+                    body.reviews.forEach((review) => {
+                        expect(review).toEqual(
+                            expect.objectContaining({
+                                review_id: expect.any(Number),
+                                title: expect.any(String),
+                                designer: expect.any(String),
+                                owner: expect.any(String),
+                                review_img_url: expect.any(String),
+                                review_body: expect.any(String),
+                                category: 'social deduction',
+                                created_at: expect.any(String),
+                                votes: expect.any(Number),
+                                comment_count: expect.any(Number)
+                            })
+                        )
+                    })
+                })
+        })
+        it("should return status: 200, and return an empty array when a category has no reviews yet", () => {
+            return request(app)
+                .get("/api/reviews?category=children's games")
+                .expect(200)
+                .then(({body}) => {
+                    expect(body.reviews).toEqual([])
+                    })
+        })
+    })
     describe("/api/reviews/:review_id", ()=>{
         it("should return status 200, and a review object containing specific properties", ()=>{
             return request(app)
@@ -209,6 +268,14 @@ describe("Error Handling", ()=>{
             .send(newVote)
             .expect(400)
             .then(({body})=>{
+                expect(body.msg).toEqual('Bad Request')
+            })
+    })
+    it("should return status 400: Bad Request when given a review category that does not exist", () => {
+        return request(app)
+            .get('/api/reviews?category=invalid_category')
+            .expect(400)
+            .then(({body}) => {
                 expect(body.msg).toEqual('Bad Request')
             })
     })

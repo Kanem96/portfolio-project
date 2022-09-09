@@ -7,6 +7,37 @@ exports.selectCategories = () => {
         })
 }
 
+exports.selectReviews = (query) => {
+    return db.query('SELECT * FROM categories')
+        .then(({rows}) => {
+            const categories = rows
+            const validCategories = categories.map(category => category = category.slug)
+            const queryValue = [];
+            let conditionStr = ""
+        
+            if (query.category) {
+                if (!validCategories.includes(query.category)) {
+                    return Promise.reject({status: 400, msg: 'Bad Request'})
+                } else {
+                    conditionStr += ` WHERE category = $1`
+                    queryValue.push(query.category)
+                }
+            }
+        
+            let queryStr = `SELECT reviews.*, COUNT(comments.review_id)::INT AS comment_count
+            FROM reviews 
+            LEFT JOIN comments ON reviews.review_id = comments.review_id
+            ${conditionStr}
+            GROUP BY reviews.review_id`
+        
+            return db.query(queryStr, queryValue)
+                .then(({rows}) => {
+                    const reviews = rows
+                    return reviews
+                })
+        })
+}
+
 exports.selectReviewById = (reviewId) => {
     const validId = /\d+/
     if (!validId.test(reviewId)) return Promise.reject({ status: 400, msg: "Bad Request" })

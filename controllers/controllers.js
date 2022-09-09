@@ -2,7 +2,8 @@ const {
     selectCategories,
     selectReviewById,
     selectUsers,
-    updateReviewById
+    updateReviewById,
+    selectReviews
 } = require("../models/models")
 
 exports.getCategories = (request, response, next)=>{
@@ -11,6 +12,17 @@ exports.getCategories = (request, response, next)=>{
             response.status(200).send({categories})
         })
         .catch((error)=>{
+            next(error)
+        })
+}
+
+exports.getReviews = (request, response, next) => {
+    const {query} = request
+    selectReviews(query)
+        .then((reviews) => {
+            response.status(200).send({reviews})
+        })
+        .catch((error) => {
             next(error)
         })
 }
