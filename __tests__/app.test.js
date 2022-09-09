@@ -166,7 +166,7 @@ describe("GET", ()=>{
                 })
             })
         })
-    describe.skip("/api/reviews/:review_id/comments", () => {
+    describe("/api/reviews/:review_id/comments", () => {
         it("should return status: 200, and an array of comments for the given ID and contain specific properties", () => {
             return request(app)
                 .get("/api/reviews/2/comments")

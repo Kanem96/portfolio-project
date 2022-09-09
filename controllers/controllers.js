@@ -1,4 +1,3 @@
-const { response } = require("../app")
 const {
     selectCategories,
     selectReviewById,
@@ -42,7 +41,6 @@ exports.getReviewById = (request, response, next) =>{
 
 exports.getCommentsByReviewId = (request, response, next) => {
     const {review_id} = request.params
-    console.log(review_id)
     selectCommentsByReviewId(review_id)
         .then((comments) => {
             response.status(200).send({comments})
