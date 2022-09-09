@@ -40,11 +40,15 @@ exports.getReviewById = (request, response, next) =>{
         })
 }
 
-exports.getCommentsByReviewId = (request, response) => {
+exports.getCommentsByReviewId = (request, response, next) => {
     const {review_id} = request.params
+    console.log(review_id)
     selectCommentsByReviewId(review_id)
         .then((comments) => {
             response.status(200).send({comments})
+        })
+        .catch((error)=> {
+            next(error)
         })
 }
 exports.getUsers = (request, response, next) => {

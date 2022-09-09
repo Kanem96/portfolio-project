@@ -80,8 +80,19 @@ exports.updateReviewById = (reviewId, updateInformation) => {
 }
 
 exports.selectCommentsByReviewId = (reviewId) => {
-    return db.query(`SELECT * FROM comments WHERE review_id = $1`, [reviewId])
+    return db.query('SELECT * FROM reviews')
         .then(({rows}) => {
-            return rows
+            const reviews = rows
+            const validId = reviews.map(review => review.review_id)
+            console.log(validId)
+            console.log(validId.includes(Number(reviewId)))
+            if (!validId.includes(reviewId)) return Promise.reject({status: 404, msg: `Review ID: ${reviewId} does not exist`})
+            
+            return db.query(`SELECT * FROM comments WHERE review_id = $1`, [reviewId])
+                .then(({rows}) => {
+                    console.log("in here")
+                    const comments = rows
+                    return comments
+                })
         })
 }

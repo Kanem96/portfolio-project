@@ -166,7 +166,7 @@ describe("GET", ()=>{
                 })
             })
         })
-    describe("/api/reviews/:review_id/comments", () => {
+    describe.skip("/api/reviews/:review_id/comments", () => {
         it("should return status: 200, and an array of comments for the given ID and contain specific properties", () => {
             return request(app)
                 .get("/api/reviews/2/comments")
@@ -305,6 +305,14 @@ describe("Error Handling", ()=>{
             .expect(400)
             .then(({body}) => {
                 expect(body.msg).toEqual('Bad Request')
+            })
+    })
+    it("should return status 404: when given a review ID that does not exist", () => {
+        return request(app)
+            .get("/api/reviews/9999/comments")
+            .expect(404)
+            .then(({body}) => {
+                expect(body.msg).toEqual('Review ID: 9999 does not exist')
             })
     })
 })
