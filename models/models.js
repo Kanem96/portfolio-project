@@ -78,3 +78,10 @@ exports.updateReviewById = (reviewId, updateInformation) => {
             return rows[0]
         })
 }
+
+exports.selectCommentsByReviewId = (reviewId) => {
+    return db.query(`SELECT * FROM comments WHERE review_id = $1`, [reviewId])
+        .then(({rows}) => {
+            return rows
+        })
+}

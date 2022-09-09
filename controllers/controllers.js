@@ -1,9 +1,11 @@
+const { response } = require("../app")
 const {
     selectCategories,
     selectReviewById,
     selectUsers,
     updateReviewById,
-    selectReviews
+    selectReviews,
+    selectCommentsByReviewId
 } = require("../models/models")
 
 exports.getCategories = (request, response, next)=>{
@@ -38,6 +40,13 @@ exports.getReviewById = (request, response, next) =>{
         })
 }
 
+exports.getCommentsByReviewId = (request, response) => {
+    const {review_id} = request.params
+    selectCommentsByReviewId(review_id)
+        .then((comments) => {
+            response.status(200).send({comments})
+        })
+}
 exports.getUsers = (request, response, next) => {
     selectUsers()
         .then((users)=>{

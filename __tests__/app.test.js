@@ -166,6 +166,34 @@ describe("GET", ()=>{
                 })
             })
         })
+    describe("/api/reviews/:review_id/comments", () => {
+        it("should return status: 200, and an array of comments for the given ID and contain specific properties", () => {
+            return request(app)
+                .get("/api/reviews/2/comments")
+                .expect(200)
+                .then(({body}) => {
+                    expect(body.comments.length).toBeGreaterThan(0)
+                    body.comments.forEach((comment) => {
+                        expect(comment).toEqual({
+                            comment_id: expect.any(Number),
+                            body: expect.any(String),
+                            votes: expect.any(Number),
+                            author: expect.any(String),
+                            review_id: 2,
+                            created_at: expect.any(String), 
+                        })
+                    })
+                })
+        })
+        it("should return status: 200, and an empty array when given a valid ID", () => {
+            return request(app)
+                .get("/api/reviews/1/comments")
+                .expect(200)
+                .then(({body}) => {
+                    expect(body.comments).toEqual([])
+                })
+        })
+    })
 })
 
 describe("PATCH", () => {
