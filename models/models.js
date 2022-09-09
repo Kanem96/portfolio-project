@@ -24,7 +24,9 @@ exports.selectReviews = (query) => {
 
     return db.query(queryStr, queryValue)
         .then(({rows}) => {
-            return rows
+            const reviews = rows
+            if (reviews.length < 1) return Promise.reject({status: 400, msg: 'Bad Request'})
+            return reviews
         })
 }
 

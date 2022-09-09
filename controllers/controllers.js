@@ -16,11 +16,14 @@ exports.getCategories = (request, response, next)=>{
         })
 }
 
-exports.getReviews = (request, response) => {
+exports.getReviews = (request, response, next) => {
     const {query} = request
     selectReviews(query)
         .then((reviews) => {
             response.status(200).send({reviews})
+        })
+        .catch((error) => {
+            next(error)
         })
 }
 

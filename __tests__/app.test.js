@@ -71,7 +71,6 @@ describe("GET", ()=>{
                 .get("/api/reviews?category=social deduction")
                 .expect(200)
                 .then(({body}) => {
-                    console.log(body)
                     body.reviews.forEach((review) => {
                         expect(review).toEqual(
                             expect.objectContaining({
@@ -260,6 +259,14 @@ describe("Error Handling", ()=>{
             .send(newVote)
             .expect(400)
             .then(({body})=>{
+                expect(body.msg).toEqual('Bad Request')
+            })
+    })
+    it("should return status 400: Bad Request when given a review category that does not exist", () => {
+        return request(app)
+            .get('/api/reviews?category=invalid_category')
+            .expect(400)
+            .then(({body}) => {
                 expect(body.msg).toEqual('Bad Request')
             })
     })
