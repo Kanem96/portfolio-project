@@ -71,6 +71,7 @@ describe("GET", ()=>{
                 .get("/api/reviews?category=social deduction")
                 .expect(200)
                 .then(({body}) => {
+                    expect(body.reviews.length).toBeGreaterThan(0)
                     body.reviews.forEach((review) => {
                         expect(review).toEqual(
                             expect.objectContaining({
@@ -88,6 +89,14 @@ describe("GET", ()=>{
                         )
                     })
                 })
+        })
+        it("should return status: 200, and return an empty array when a category has no reviews yet", () => {
+            return request(app)
+                .get("/api/reviews?category=children's games")
+                .expect(200)
+                .then(({body}) => {
+                    expect(body.reviews).toEqual([])
+                    })
         })
     })
     describe("/api/reviews/:review_id", ()=>{

@@ -20,6 +20,7 @@ exports.getReviews = (request, response, next) => {
     const {query} = request
     selectReviews(query)
         .then((reviews) => {
+            console.log(reviews)
             response.status(200).send({reviews})
         })
         .catch((error) => {

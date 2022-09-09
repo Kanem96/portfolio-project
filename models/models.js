@@ -8,12 +8,17 @@ exports.selectCategories = () => {
 }
 
 exports.selectReviews = (query) => {
+    const validCategories = ["euro game", "social deduction", "dexterity", "children's games"]
     const queryValue = [];
     let conditionStr = ""
 
     if (query.category) {
-        conditionStr += ` WHERE category = $1`
-        queryValue.push(query.category)
+        if (!validCategories.includes(query.category)) {
+            return Promise.reject({status: 400, msg: 'Bad Request'})
+        } else {
+            conditionStr += ` WHERE category = $1`
+            queryValue.push(query.category)
+        }
     }
 
     let queryStr = `SELECT reviews.*, COUNT(comments.review_id)::INT AS comment_count
@@ -25,7 +30,6 @@ exports.selectReviews = (query) => {
     return db.query(queryStr, queryValue)
         .then(({rows}) => {
             const reviews = rows
-            if (reviews.length < 1) return Promise.reject({status: 400, msg: 'Bad Request'})
             return reviews
         })
 }
