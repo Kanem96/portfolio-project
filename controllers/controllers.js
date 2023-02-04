@@ -38,6 +38,8 @@ exports.getReviewById = (request, response, next) =>{
         })
 }
 
+exports.getReviewsOrderedById
+
 exports.getUsers = (request, response, next) => {
     selectUsers()
         .then((users)=>{
