@@ -155,17 +155,38 @@ describe("GET", () => {
         });
     });
   });
-  // describe("/api/reviews?sort_by", () => {
-  //     it("should return status 200, and an array of review objects sorted by specified filter", () => {
-  //         return request(app)
-  //         .get('api/reviews/sort_by=item_name')
-  //         .expect(200)
-  //         .then(({body}) => {
-  //             const reviews = body.reviews
-  //             expect(reviews).toEqual([])
-  //         })
-  //     })
-  // })
+  describe("/api/reviews?sort_by", () => {
+    it("should return status: 200, and return a list of all reviews filtered by the given query category", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=review_id")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.reviews.length).toBeGreaterThan(0);
+          const reviews = body.reviews;
+          const reviewsSorted = true;
+          for (let i = 0; i < reviews.length - 1; i++) {
+            if (reviews[i].review_id > reviews[i + 1].review_id) sorted = false;
+          }
+          expect(reviewsSorted).toBe(true);
+        });
+    });
+//TODO check this test is working properly
+    it("should return status: 200, and return a list of all reviews filtered by the given query category in the specified order", () => {
+      return request(app)
+        .get("/api/reviews?sort_by=review_id&order=desc")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.reviews.length).toBeGreaterThan(0);
+          const reviews = body.reviews;
+          console.log(reviews)
+          const reviewsSorted = true;
+          for (let i = 0; i < reviews.length - 1; i++) {
+            if (reviews[i].review_id < reviews[i + 1].review_id) sorted = false;
+          }
+          expect(reviewsSorted).toBe(true);
+        });
+    });
+  });
   describe("/api/users", () => {
     it("should return status: 200, and an array of objects containing specific properties", () => {
       return request(app)
