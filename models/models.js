@@ -6,7 +6,7 @@ exports.selectCategories = () => {
   });
 };
 
-exports.    selectReviews = (query) => {
+exports.selectReviews = (query) => {
   return db.query("SELECT * FROM categories").then(({ rows }) => {
     const categories = rows;
     const validCategories = categories.map(
