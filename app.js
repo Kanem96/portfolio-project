@@ -6,8 +6,10 @@ const {
     patchReviewById,
     getReviews  
 } = require("./controllers/controllers");
-
+const cors = require('cors')
 const app = express();
+
+app.use(cors())
 
 app.use(express.json())
 
