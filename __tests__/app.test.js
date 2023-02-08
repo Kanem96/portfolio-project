@@ -165,12 +165,12 @@ describe("GET", () => {
           const reviews = body.reviews;
           const reviewsSorted = true;
           for (let i = 0; i < reviews.length - 1; i++) {
-            if (reviews[i].review_id > reviews[i + 1].review_id) sorted = false;
+            if (reviews[i].review_id > reviews[i + 1].review_id) reviewsSorted = false;
           }
           expect(reviewsSorted).toBe(true);
         });
     });
-//TODO check this test is working properly
+    //TODO check this test is working properly
     it("should return status: 200, and return a list of all reviews filtered by the given query category in the specified order", () => {
       return request(app)
         .get("/api/reviews?sort_by=review_id&order=desc")
@@ -178,10 +178,11 @@ describe("GET", () => {
         .then(({ body }) => {
           expect(body.reviews.length).toBeGreaterThan(0);
           const reviews = body.reviews;
-          console.log(reviews)
+          console.log(reviews);
           const reviewsSorted = true;
           for (let i = 0; i < reviews.length - 1; i++) {
-            if (reviews[i].review_id < reviews[i + 1].review_id) sorted = false;
+            if (reviews[i].review_id < reviews[i + 1].review_id)
+              reviewsSorted = false;
           }
           expect(reviewsSorted).toBe(true);
         });

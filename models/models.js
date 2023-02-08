@@ -25,10 +25,10 @@ exports.selectReviews = (query) => {
     }
 
     let sortStr = "";
-    let sortDirection = "ASC"
+    let sortDirection = "ASC";
     if (query.sort_by) {
-        sortStr = `ORDER BY ${query.sort_by} ${sortDirection}`
-        if(query.order === "desc") sortDirection = 'DESC'
+      if (query.order === "desc") sortDirection = "DESC";
+      sortStr = `ORDER BY ${query.sort_by} ${sortDirection}`;
     }
 
     let queryStr = `SELECT reviews.*, COUNT(comments.review_id)::INT AS comment_count
@@ -40,6 +40,7 @@ exports.selectReviews = (query) => {
 
     return db.query(queryStr, queryValue).then(({ rows }) => {
       const reviews = rows;
+      console.log(queryStr);
       return reviews;
     });
   });
