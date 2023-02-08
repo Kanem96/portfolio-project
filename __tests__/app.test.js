@@ -131,81 +131,112 @@ describe("GET", () => {
           );
         });
     });
-    it("should return status 200, and a review object containing specific properties", () => {
+  });
+  describe("/api/reviews/:review_id/comments", () => {
+    it("should return status: 200, and an array of comments for the given ID and contain specific properties", () => {
       return request(app)
-        .get("/api/reviews/2")
+        .get("/api/reviews/2/comments")
         .expect(200)
         .then(({ body }) => {
-          const review = body.review[0];
-          expect(review).toEqual(
-            expect.objectContaining({
+          expect(body.comments.length).toBeGreaterThan(0);
+          body.comments.forEach((comment) => {
+            expect(comment).toEqual({
+              comment_id: expect.any(Number),
+              body: expect.any(String),
+              votes: expect.any(Number),
+              author: expect.any(String),
               review_id: 2,
-              title: "Jenga",
-              designer: "Leslie Scott",
-              owner: "philippaclaire9",
-              review_img_url:
-                "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-              review_body: "Fiddly fun for all the family",
-              category: "dexterity",
               created_at: expect.any(String),
-              votes: 5,
-              comment_count: 3,
-            })
-          );
-        });
-    });
-  });
-  describe("/api/reviews?sort_by", () => {
-    it("should return status: 200, and return a list of all reviews filtered by the given query category", () => {
-      return request(app)
-        .get("/api/reviews?sort_by=review_id")
-        .expect(200)
-        .then(({ body }) => {
-          expect(body.reviews.length).toBeGreaterThan(0);
-          const reviews = body.reviews;
-          const reviewsSorted = true;
-          for (let i = 0; i < reviews.length - 1; i++) {
-            if (reviews[i].review_id > reviews[i + 1].review_id) reviewsSorted = false;
-          }
-          expect(reviewsSorted).toBe(true);
-        });
-    });
-    //TODO check this test is working properly
-    it("should return status: 200, and return a list of all reviews filtered by the given query category in the specified order", () => {
-      return request(app)
-        .get("/api/reviews?sort_by=review_id&order=desc")
-        .expect(200)
-        .then(({ body }) => {
-          expect(body.reviews.length).toBeGreaterThan(0);
-          const reviews = body.reviews;
-          console.log(reviews);
-          const reviewsSorted = true;
-          for (let i = 0; i < reviews.length - 1; i++) {
-            if (reviews[i].review_id < reviews[i + 1].review_id)
-              reviewsSorted = false;
-          }
-          expect(reviewsSorted).toBe(true);
-        });
-    });
-  });
-  describe("/api/users", () => {
-    it("should return status: 200, and an array of objects containing specific properties", () => {
-      return request(app)
-        .get("/api/users")
-        .expect(200)
-        .then(({ body }) => {
-          expect(body.users.length).toBeGreaterThan(0);
-          body.users.forEach((user) => {
-            expect(user).toEqual(
-              expect.objectContaining({
-                username: expect.any(String),
-                name: expect.any(String),
-                avatar_url: expect.any(String),
-              })
-            );
+            });
           });
         });
     });
+    it("should return status: 200, and an empty array when given a valid ID", () => {
+      return request(app)
+        .get("/api/reviews/1/comments")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.comments).toEqual([]);
+        });
+    });
+  });
+});
+
+it("should return status 200, and a review object containing specific properties", () => {
+  return request(app)
+    .get("/api/reviews/2")
+    .expect(200)
+    .then(({ body }) => {
+      const review = body.review[0];
+      expect(review).toEqual(
+        expect.objectContaining({
+          review_id: 2,
+          title: "Jenga",
+          designer: "Leslie Scott",
+          owner: "philippaclaire9",
+          review_img_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+          review_body: "Fiddly fun for all the family",
+          category: "dexterity",
+          created_at: expect.any(String),
+          votes: 5,
+          comment_count: 3,
+        })
+      );
+    });
+});
+
+describe("/api/reviews?sort_by", () => {
+  it("should return status: 200, and return a list of all reviews filtered by the given query category", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=review_id")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.reviews.length).toBeGreaterThan(0);
+        const reviews = body.reviews;
+        const reviewsSorted = true;
+        for (let i = 0; i < reviews.length - 1; i++) {
+          if (reviews[i].review_id > reviews[i + 1].review_id)
+            reviewsSorted = false;
+        }
+        expect(reviewsSorted).toBe(true);
+      });
+  });
+  //TODO check this test is working properly
+  it("should return status: 200, and return a list of all reviews filtered by the given query category in the specified order", () => {
+    return request(app)
+      .get("/api/reviews?sort_by=review_id&order=desc")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.reviews.length).toBeGreaterThan(0);
+        const reviews = body.reviews;
+        console.log(reviews);
+        const reviewsSorted = true;
+        for (let i = 0; i < reviews.length - 1; i++) {
+          if (reviews[i].review_id < reviews[i + 1].review_id)
+            reviewsSorted = false;
+        }
+        expect(reviewsSorted).toBe(true);
+      });
+  });
+});
+describe("/api/users", () => {
+  it("should return status: 200, and an array of objects containing specific properties", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.users.length).toBeGreaterThan(0);
+        body.users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
+      });
   });
 });
 
@@ -261,6 +292,73 @@ describe("PATCH", () => {
           });
         });
     });
+  });
+});
+
+describe("Error Handling", () => {
+  it("should return status 404: Not found when given a path that does not exist", () => {
+    return request(app)
+      .get("/api/not-a-path")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Not Found");
+      });
+  });
+  it("should return status 404: No Review Found when given an id that does not exist", () => {
+    return request(app)
+      .get("/api/reviews/9999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("No review found for review_id: 9999");
+      });
+  });
+  it("should return status 400: Bad Request when given an invalid path", () => {
+    return request(app)
+      .get("/api/reviews/not-a-review-id")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad Request");
+      });
+  });
+  it("should return status 400: Bad Request when given an invalid value on the request body property", () => {
+    const newVote = {
+      inc_votes: "invalid value", // Passing string into request body, this should return error
+    };
+    return request(app)
+      .patch("/api/reviews/1")
+      .send(newVote)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad Request");
+      });
+  });
+  it("should return status 400: Bad Request when given an invalid key on the request body property", () => {
+    const newVote = {
+      invalidKey: 50, // Passing string into request body, this should return error as the datatype in the db is an INT
+    };
+    return request(app)
+      .patch("/api/reviews/1")
+      .send(newVote)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad Request");
+      });
+  });
+  it("should return status 400: Bad Request when given a review category that does not exist", () => {
+    return request(app)
+      .get("/api/reviews?category=invalid_category")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Bad Request");
+      });
+  });
+  it("should return status 404: when given a review ID that does not exist", () => {
+    return request(app)
+      .get("/api/reviews/9999/comments")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toEqual("Review ID: 9999 does not exist");
+      });
   });
 });
 
