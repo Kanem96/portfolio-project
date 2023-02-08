@@ -49,6 +49,7 @@ exports.getCommentsByReviewId = (request, response, next) => {
             next(error)
         })
 }
+
 exports.getUsers = (request, response, next) => {
     selectUsers()
         .then((users)=>{

@@ -7,8 +7,10 @@ const {
     getReviews,
     getCommentsByReviewId
 } = require("./controllers/controllers");
-
+const cors = require('cors')
 const app = express();
+
+app.use(cors())
 
 app.use(express.json())
 
@@ -22,7 +24,7 @@ app.get('/api/reviews/:review_id/comments', getCommentsByReviewId)
 
 app.get('/api/users', getUsers);
 
-app.patch('/api/reviews/:review_id', patchReviewById)
+app.patch('/api/reviews/:review_id', patchReviewById);
 
 app.all("*", (request, response)=>{
     response.status(404).send({status: 404, msg: "Not Found"})
