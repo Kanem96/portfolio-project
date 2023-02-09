@@ -101,6 +101,16 @@ exports.updateReviewById = (reviewId, updateInformation) => {
     });
 };
 
+exports.deleteCommentById = (commentId) => {
+  return db
+    .query(`DELETE FROM comments WHERE comment_id = $1`, [commentId])
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return { status: 204, msg: "No Content" };
+      }
+    });
+};
+
 exports.selectCommentsByReviewId = (reviewId) => {
   return db
     .query(`SELECT * FROM reviews WHERE review_id = $1`, [reviewId])
@@ -117,7 +127,7 @@ exports.selectCommentsByReviewId = (reviewId) => {
       ]);
     })
     .then(({ rows }) => {
-      const comments = rows;
-      return comments;
+      console.log(rows);
+      return rows;
     });
 };
