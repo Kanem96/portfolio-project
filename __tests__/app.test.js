@@ -295,6 +295,19 @@ describe("PATCH", () => {
   });
 });
 
+describe("DELETE", () => {
+  describe("/api/comments/:comment_id", () => {
+    it("should delete a comment from comments and return 204: No Content", () => {
+      return request(app)
+        .delete("/api/comments/54")
+        .expect(204)
+        .then(( {res} ) => {
+          expect(res.statusMessage).toEqual("No Content");
+        });
+    });
+  });
+});
+
 describe("Error Handling", () => {
   it("should return status 404: Not found when given a path that does not exist", () => {
     return request(app)
