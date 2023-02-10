@@ -79,6 +79,19 @@ exports.selectUsers = () => {
   });
 };
 
+exports.insertCommentById = (reviewId, newComment) => {
+  const { username, body } = newComment;
+  console.log("in model");
+  return db
+    .query(
+      `INSERT INTO comments (author, body, review_id)
+      VALUES ($1, $2, $3)
+      RETURNING *`,
+      [username, body, reviewId]
+    )
+    .then(({ rows }) => rows[0]);
+};
+
 exports.updateReviewById = (reviewId, updateInformation) => {
   const newVote = updateInformation.inc_votes;
   if (

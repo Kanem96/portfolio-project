@@ -3,6 +3,7 @@ const {
   selectReviewById,
   selectUsers,
   updateReviewById,
+  insertCommentById,
   deleteCommentById,
   selectReviews,
   selectCommentsByReviewId,
@@ -61,6 +62,17 @@ exports.getUsers = (request, response, next) => {
     });
 };
 
+exports.postCommentByReviewId = (request, response, next) => {
+  const { review_id } = request.params;
+  const newComment = request.body;
+console.log("in controller")
+  insertCommentById(review_id, newComment)
+    .then((comment) => {
+      response.status(201).send({ comment });
+    })
+    .catch((error) => next(error));
+};
+
 exports.patchReviewById = (request, response, next) => {
   const { review_id } = request.params;
   const updateInformation = request.body;
@@ -77,7 +89,8 @@ exports.deleteCommentByCommentId = (request, response, next) => {
   const { comment_id } = request.params;
   deleteCommentById(comment_id)
     .then((comment) => {
-      console.log(comment)
-      return response.status(comment.status).send(comment.msg)})
+      console.log(comment);
+      return response.status(comment.status).send(comment.msg);
+    })
     .catch((error) => next(error));
 };

@@ -6,7 +6,8 @@ const {
     patchReviewById,
     deleteCommentByCommentId,
     getReviews,
-    getCommentsByReviewId
+    getCommentsByReviewId,
+    postCommentByReviewId
 } = require("./controllers/controllers");
 const cors = require('cors')
 const app = express();
@@ -24,6 +25,8 @@ app.get('/api/reviews/:review_id', getReviewById);
 app.get('/api/reviews/:review_id/comments', getCommentsByReviewId)
 
 app.get('/api/users', getUsers);
+
+app.post('/api/reviews/:review_id/comments', postCommentByReviewId);
 
 app.patch('/api/reviews/:review_id', patchReviewById);
 

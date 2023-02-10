@@ -240,6 +240,32 @@ describe("/api/users", () => {
   });
 });
 
+describe("POST", () => {
+  describe("/api/reviews/:review_id/comments", () => {
+    it("should return status 201 and the posted comment on successful post", () => {
+      const newComment = {
+        username: "mallionaire",
+        body: "lorem ipsum blah blah blah",
+      };
+      return request(app)
+        .post("/api/reviews/1/comments")
+        .send(newComment)
+        .expect(201)
+        .then(({ body }) => {
+          expect(body).toEqual({
+            comment: {
+              author: "mallionaire",
+              body: "lorem ipsum blah blah blah",
+              comment_id: 7,
+              review_id: 1,
+              created_at: expect.any(String),
+              votes: 0,
+            },
+          });
+        });
+    });
+  });
+});
 describe("PATCH", () => {
   describe("/api/reviews/:review_id", () => {
     it("should return status 200, and the updated review", () => {
@@ -301,7 +327,7 @@ describe("DELETE", () => {
       return request(app)
         .delete("/api/comments/54")
         .expect(204)
-        .then(( {res} ) => {
+        .then(({ res }) => {
           expect(res.statusMessage).toEqual("No Content");
         });
     });
