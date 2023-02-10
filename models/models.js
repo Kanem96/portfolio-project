@@ -81,7 +81,6 @@ exports.selectUsers = () => {
 
 exports.insertCommentById = (reviewId, newComment) => {
   const { username, body } = newComment;
-  console.log("in model");
   return db
     .query(
       `INSERT INTO comments (author, body, review_id)
@@ -140,7 +139,6 @@ exports.selectCommentsByReviewId = (reviewId) => {
       ]);
     })
     .then(({ rows }) => {
-      console.log(rows);
       return rows;
     });
 };

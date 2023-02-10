@@ -65,7 +65,6 @@ exports.getUsers = (request, response, next) => {
 exports.postCommentByReviewId = (request, response, next) => {
   const { review_id } = request.params;
   const newComment = request.body;
-console.log("in controller")
   insertCommentById(review_id, newComment)
     .then((comment) => {
       response.status(201).send({ comment });
@@ -89,7 +88,6 @@ exports.deleteCommentByCommentId = (request, response, next) => {
   const { comment_id } = request.params;
   deleteCommentById(comment_id)
     .then((comment) => {
-      console.log(comment);
       return response.status(comment.status).send(comment.msg);
     })
     .catch((error) => next(error));
